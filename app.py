@@ -4,29 +4,29 @@ import pandas as pd #เรียกใช้ pandas ไลบรารี Pytho
 import numpy as np #เรียกใช้ไลบารี่ numpy เพื่อช่วยในการคำนวนอาเรย์
 from PIL import Image #เรียกใช้ไลบารี่ Pillow 
 from datetime import datetime #เรียกใช้ datetime เพื่อกำหนดเวลาที่ใช้งาน ณ เวลานั้น
-from deta import Deta  # pip install deta
+# from deta import Deta  # pip install deta
 
 
-TOKEN = "c0pkmexkqcy_aEAVfc6FzqstaPP7EWVf9hMFq3Nyha4H" #tokendeta
-# Initialize with a project key
-deta = Deta(TOKEN)
-# This is how to create/connect a database
-db = deta.Base("imagesdata") 
+# TOKEN = "c0pkmexkqcy_aEAVfc6FzqstaPP7EWVf9hMFq3Nyha4H" #tokendeta
+# # Initialize with a project key
+# deta = Deta(TOKEN)
+# # This is how to create/connect a database
+# db = deta.Base("imagesdata") 
 
-def insert_imagesdata(add_name, gender, age, user_time): #กำหนดตัวแปรเพื่อรับค่าที่จะนำไปเก็บใน table
-    """Returns the report on a successful creation, otherwise raises an error""" #ส่งกลับรายงานเกี่ยวกับการสร้างที่สำเร็จ มิฉะนั้น จะทำให้เกิดข้อผิดพลาด
-    return db.put({"key": add_name, "gender": gender, "age": age, "datetime": user_time})
-
-
-def fetch_all_imagesdata():  #ส่งคืน dict ของ imagesdata ทั้งหมด
-    """Returns a dict of all imagesdata""" 
-    res = db.fetch() 
-    return res.items
+# def insert_imagesdata(add_name, gender, age, user_time): #กำหนดตัวแปรเพื่อรับค่าที่จะนำไปเก็บใน table
+#     """Returns the report on a successful creation, otherwise raises an error""" #ส่งกลับรายงานเกี่ยวกับการสร้างที่สำเร็จ มิฉะนั้น จะทำให้เกิดข้อผิดพลาด
+#     return db.put({"key": add_name, "gender": gender, "age": age, "datetime": user_time})
 
 
-def get_imagesdata(imagesdata): #หากไม่พบ ฟังก์ชันจะคืนค่า None
-    """If not found, the function will return None"""
-    return db.get(imagesdata)
+# def fetch_all_imagesdata():  #ส่งคืน dict ของ imagesdata ทั้งหมด
+#     """Returns a dict of all imagesdata""" 
+#     res = db.fetch() 
+#     return res.items
+
+
+# def get_imagesdata(imagesdata): #หากไม่พบ ฟังก์ชันจะคืนค่า None
+#     """If not found, the function will return None"""
+#     return db.get(imagesdata)
 
 class Detectface(): #เขียนอยู่ในรูปแบบ oop โดยการเรียกใช้ฟังก์ชั่น
     def get_face_box(net, frame, conf_threshold=0.7):#โค๊ด Python สำหรับการตรวจจับใบหน้า ตั้งแต่ 32-50
@@ -131,10 +131,10 @@ if photo: #เงื่อนไขรูปภาพ
         add_data = options_form.form_submit_button("บันทึกข้อมูล") #กำหนดปุ่มบันทึก
 
         if add_data: #กำหนดให้ทำการบันทึกข้อมูลไปยัง CSV
-            new_data = {"name": add_name , "gender": gender ,"age": age ,"time": user_time} #กำหนดให้บันทึกคอลัมน์
-            #df = df.append(new_data, ignore_index = True)
-            #df.to_csv("data/test.csv" , index = False)
-            insert_imagesdata(add_name,gender,age,user_time) #รับค่าไปเก็บใน ฐานข้อมูลใน Deta
+            new_data = pd.DataFrame({"name": [add_name], "gender": [gender], "age": [age], "time": [user_time]}) #กำหนดให้บันทึกคอลัมน์
+            df = pd.concat([df, new_data], ignore_index=True)
+            df.to_csv("data/test.csv", index=False)
+            # insert_imagesdata(add_name,gender,age,user_time) #รับค่าไปเก็บใน ฐานข้อมูลใน Deta
             st.sidebar.header("บันทึกข้อมูลสำเร็จ")  #แสดงข้อความทางแถบซ้าย
             
         im_pil = Image.fromarray(frameFace) #แปลงอาร์เรย์ numpy เป็น PIL Image
