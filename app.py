@@ -136,6 +136,7 @@ if photo: #เงื่อนไขรูปภาพ
             df.to_csv("data/test.csv", index=False)
             # insert_imagesdata(add_name,gender,age,user_time) #รับค่าไปเก็บใน ฐานข้อมูลใน Deta
             st.sidebar.header("บันทึกข้อมูลสำเร็จ")  #แสดงข้อความทางแถบซ้าย
+            st.experimental_rerun() #รีเซต sidebar
             
         im_pil = Image.fromarray(frameFace) #แปลงอาร์เรย์ numpy เป็น PIL Image
         im_pil.save('result.jpeg') #บันทึกรูปผลลัพธ์ลงได้ฐานข้อมูล
